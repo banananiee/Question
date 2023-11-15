@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  git-server:
+      image: alpine/git
+      volumes:
+        - ./repos:/git
+      environment:
+        - GIT_ACCESS_USERNAME=AnnaNg
+        - GIT_ACCESS_PASSWORD=2101528@sit.singaporetech.edu.sg
+      ports:
+        - "9418:9418"
+  jenkins:
+    container_name: jenkins
+    build: ./jenkins
+    ports:
+      - '8080:8080'
+      - '443:8443'
+      - '50000:50000'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./jenkins_home:/var/jenkins_home
+  
+  webapp:
+    container_name: webapp
+    build: ./webapp
+    ports:
+      - "80:80"
+
+volumes:
+  jenkins_data:
+    driver: local
